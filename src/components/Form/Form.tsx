@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {Contact} from "../../types";
+import {ContactApi} from "../../types";
 import ButtonSpinner from "../Spinner/ButtonSpinner";
+import {useAppSelector} from "../../app/hooks";
+import {selectAddLoading, selectUpdateLoading} from "../../store/contactsAppSlice";
 
 interface FormMutation {
   name: string;
@@ -10,15 +12,18 @@ interface FormMutation {
 }
 
 interface Props {
-  onSubmit: (contact: FormMutation) => void;
-  existingContact?: Contact | null;
+  onSubmit: (contact: ContactApi) => void;
+  existingContact?: ContactApi | null;
   isLoading?: boolean;
 }
 
 
 const Form: React.FC<Props> = ({onSubmit,existingContact,isLoading= false}) => {
-  // const initialState = existingContact ? {...existingContact, calories: existingContact.calories.toString()} : {timeMeal: '', food: '', calories: '', date: todayDate};
-  const [contact, setContact] = useState<FormMutation>({name: '', phone: '', email: '', image: ''});
+  const updatingLoading = useAppSelector(selectUpdateLoading);
+  const addLoading = useAppSelector(selectAddLoading);
+
+  const initialState = existingContact ? {...existingContact, phone: existingContact.phone.toString()} : {name: '', phone: '', email: '', image: ''};
+  const [contact, setContact] = useState<FormMutation>(initialState);
 
   const onTextFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = e.target.value;
@@ -33,7 +38,7 @@ const Form: React.FC<Props> = ({onSubmit,existingContact,isLoading= false}) => {
     e.preventDefault();
     onSubmit({
       name: contact.name,
-      phone: contact.phone,
+      phone: parseInt(contact.phone),
       email: contact.email,
       image: contact.image,
     })
@@ -77,7 +82,7 @@ const Form: React.FC<Props> = ({onSubmit,existingContact,isLoading= false}) => {
       />
       <img src={contact.image} style={{width: "500px", height: "500px"}} alt="czcxz"/>
       <button type="submit" disabled={isLoading} className="d-block btn btn-primary mt-2">
-        {isLoading && <ButtonSpinner/>}
+        {updatingLoading || addLoading ? <ButtonSpinner/> : ''}
         Save
       </button>
     </form>

@@ -1,11 +1,18 @@
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectSelectedContact, unSelectContact} from "../../store/contactsAppSlice";
+import {selectDeleteLoading, selectSelectedContact, unSelectContact} from "../../store/contactsAppSlice";
+import {Link} from "react-router-dom";
+import ButtonSpinner from "../Spinner/ButtonSpinner";
+
+interface Props {
+  onDelete: (id: string) => void;
+}
 
 
-const Modal = () => {
+const Modal: React.FC<Props> = ({onDelete}) => {
   const dispatch = useAppDispatch();
   const selectedContact = useAppSelector(selectSelectedContact);
+  const deleteLoading = useAppSelector(selectDeleteLoading);
 
   return (
     <>
@@ -33,8 +40,14 @@ const Modal = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-primary me-2" onClick={() => dispatch(unSelectContact())}>Edit</button>
-              <button className="btn btn-danger" onClick={() => dispatch(unSelectContact())}>Cancel</button>
+              <Link
+                to={selectedContact ? "/edit-contact/" + selectedContact.id : '/'}
+                className="btn btn-primary me-2"
+                onClick={() => dispatch(unSelectContact())}>Edit</Link>
+              <button className="btn btn-danger" onClick={() => onDelete(selectedContact.id)}>
+                {deleteLoading ? <ButtonSpinner/> : ''}
+                Delete
+              </button>
             </div>
           </div>
         </div>

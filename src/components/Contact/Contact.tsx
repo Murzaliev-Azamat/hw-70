@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import ContactIMG from '../../assets/03a477c788b2172c896ced7187b3d2db.jpg';
 import {selectContact} from "../../store/contactsAppSlice";
-import {fetchOneContact} from "../../store/contactsAppThunks";
 import {useAppDispatch} from "../../app/hooks";
 
 interface Props {
@@ -12,10 +11,6 @@ interface Props {
 
 const Contact: React.FC<Props> = ({name,image,id}) => {
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-      dispatch(fetchOneContact(id));
-  }, [dispatch, id]);
 
   return (
     <>

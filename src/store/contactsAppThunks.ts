@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {Contact, ContactApi, ContactsApiList, FormMutation} from "../types";
+import {Contact, ContactApi, ContactsApiList} from "../types";
 import axiosApi from "../axiosApi";
 
 export const fetchContacts = createAsyncThunk<Contact[]>(
@@ -22,10 +22,10 @@ export const fetchContacts = createAsyncThunk<Contact[]>(
 )
 
 
-export const addContact = createAsyncThunk<void, FormMutation>(
+export const addContact = createAsyncThunk<void, ContactApi>(
   'contacts/addOneContact',
   async ({name,phone,email,image}) => {
-    await axiosApi.post<Contact>('/contacts.json', {name: name, phone: parseInt(phone), email: email, image: image});
+    await axiosApi.post<ContactApi>('/contacts.json', {name: name, phone: phone, email: email, image: image});
   }
 );
 
@@ -50,3 +50,23 @@ export const fetchOneContact = createAsyncThunk<Contact, string>(
       )
   },
 )
+
+interface UpdateContactParams {
+  id: string;
+  contact: ContactApi;
+}
+
+export const updateContact = createAsyncThunk<void, UpdateContactParams>(
+  'contacts/update',
+  async (params) => {
+    await axiosApi.put("/contacts/" + params.id + '.json', params.contact);
+    // const mealResponse = await axiosApi.get<Meal>('/meals/' + id + '.json');
+  }
+);
+
+export const deleteContact = createAsyncThunk<void, string>(
+  'todo/deleteTask',
+  async (id) => {
+    await axiosApi.delete('/contacts/' + id + '.json');
+  }
+);

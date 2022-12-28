@@ -1,49 +1,43 @@
-// import React, {useCallback, useEffect, useState} from 'react';
-// import {useParams} from "react-router-dom";
-// import axiosApi from "../../axiosApi";
-// import {Meal, SendingMeal} from "../../types";
-// import Form from "../../components/Form/Form";
+import React, {useEffect} from 'react';
+import {useNavigate, useParams} from "react-router-dom";
+import Form from "../../components/Form/Form";
+import {fetchOneContact, updateContact} from "../../store/contactsAppThunks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {selectFetchOneLoading, selectOneContact} from "../../store/contactsAppSlice";
+import {ContactApi} from "../../types";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Edit = () => {
-  // const {id} = useParams();
-  // const [meal, setMeal] = useState<Meal | null>(null);
-  // const [loading, setLoading] = useState(false);
-  //
-  // const fetchOneMeal = useCallback(async () => {
-  //   try {
-  //     setLoading(true);
-  //     const mealResponse = await axiosApi.get<Meal>('/meals/' + id + '.json');
-  //     setMeal(mealResponse.data);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // },[id])
-  //
-  // useEffect(() => {
-  //   fetchOneMeal().catch(console.error);
-  // },[fetchOneMeal]);
-  //
-  // const updateMeal = async (meal: SendingMeal) => {
-  //   setLoading(true);
-  //
-  //   try {
-  //     setLoading(true);
-  //     await axiosApi.put("/meals/" + id + '.json', meal);
-  //     const mealResponse = await axiosApi.get<Meal>('/meals/' + id + '.json');
-  //     setMeal(mealResponse.data);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const {id} = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const contact = useAppSelector(selectOneContact);
+  const fetchOneLoading = useAppSelector(selectFetchOneLoading);
+
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchOneContact(id));
+    }
+  }, [dispatch, id]);
+
+  console.log(contact)
+
+  const onSubmit = async (contact: ContactApi) => {
+    if (id) {
+      await dispatch(updateContact({id, contact}));
+      navigate('/');
+    }
+  };
 
   return (
     <>
       <div>
-        {/*{meal && (*/}
-        {/*  <>*/}
-        {/*    <h4 className="mt-2 mb-2">Edit meal</h4>*/}
-        {/*    <Form existingMeal={meal} onSubmit={updateMeal} isLoading={loading}/>*/}
-        {/*  </>)}*/}
+        {contact && (
+          <>
+            <h4 className="mt-2 mb-2">Edit meal</h4>
+            {fetchOneLoading ? <Spinner/> : <Form existingContact={contact} onSubmit={onSubmit}/>}
+          </>)}
       </div>
     </>
   );
