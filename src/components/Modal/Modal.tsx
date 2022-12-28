@@ -3,6 +3,7 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectDeleteLoading, selectSelectedContact, unSelectContact} from "../../store/contactsAppSlice";
 import {Link} from "react-router-dom";
 import ButtonSpinner from "../Spinner/ButtonSpinner";
+import ContactIMG from '../../assets/03a477c788b2172c896ced7187b3d2db.jpg';
 
 interface Props {
   onDelete: (id: string) => void;
@@ -31,11 +32,11 @@ const Modal: React.FC<Props> = ({onDelete}) => {
             </div>
             <div className="modal-body">
               <div className="d-flex align-items-center">
-                <img style={{width: "100px", height: "100px", marginRight: "30px"}} src={selectedContact ? selectedContact.image : ''} alt=""/>
+                <img style={{width: "100px", height: "100px", marginRight: "30px"}} src={selectedContact ? (selectedContact.image ? selectedContact.image : ContactIMG) : ''} alt=""/>
                 <div>
                   <h2>{selectedContact ? selectedContact.name : ''}</h2>
-                  <p><a href="">{selectedContact ? selectedContact.phone : ''}</a></p>
-                  <p><a href="">{selectedContact ? selectedContact.email : ''}</a></p>
+                  <p><a href="#">{selectedContact ? selectedContact.phone : ''}</a></p>
+                  <p><a href="#">{selectedContact ? selectedContact.email : ''}</a></p>
                 </div>
               </div>
             </div>

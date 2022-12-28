@@ -59,7 +59,8 @@ const Form: React.FC<Props> = ({onSubmit,existingContact,isLoading= false}) => {
         className="d-block mt-2"
         type="tel"
         name="phone"
-        placeholder="Введите телефон"
+        placeholder="Тел в формате xxxxxxxxxxxx"
+        pattern="[0-9]{12}"
         value={contact.phone}
         onChange={onTextFieldChange}
         required
@@ -80,7 +81,7 @@ const Form: React.FC<Props> = ({onSubmit,existingContact,isLoading= false}) => {
         value={contact.image}
         onChange={onTextFieldChange}
       />
-      <img src={contact.image} style={{width: "500px", height: "500px"}} alt="czcxz"/>
+      <img src={contact.image} style={{width: "250px", height: "250px", marginTop: "5px"}} alt=""/>
       <button type="submit" disabled={isLoading} className="d-block btn btn-primary mt-2">
         {updatingLoading || addLoading ? <ButtonSpinner/> : ''}
         Save
