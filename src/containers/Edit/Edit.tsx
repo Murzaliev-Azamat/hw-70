@@ -21,8 +21,6 @@ const Edit = () => {
     }
   }, [dispatch, id]);
 
-  console.log(contact)
-
   const onSubmit = async (contact: ContactApi) => {
     if (id) {
       await dispatch(updateContact({id, contact}));
